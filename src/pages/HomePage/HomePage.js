@@ -7,17 +7,22 @@ import {
   ButtonGroup,
   RegisterButton,
 } from "./styled";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const HomePage = () => {
-  const { setToken, token } = useAuth;
+  const { setToken, token } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) navigate("/");
+  }, [token, navigate]);
+
   const handleLogout = useCallback(() => {
     localStorage.removeItem("token");
     setToken("");
     navigate("/");
-  }, []);
+  }, [setToken, navigate]);
   return (
     <HomeContainer>
       <HomeHeader>
@@ -31,12 +36,16 @@ const HomePage = () => {
       </LogContainer>
       <ButtonGroup>
         <RegisterButton>
-          <AiOutlinePlusCircle />
-          <p>Nova entrada</p>
+          <Link to="/nova-entrada">
+            <AiOutlinePlusCircle />
+            <p>Nova entrada</p>
+          </Link>
         </RegisterButton>
         <RegisterButton>
-          <AiOutlineMinusCircle />
-          <p>Nova saída</p>
+          <Link to="/nova-saida">
+            <AiOutlineMinusCircle />
+            <p>Nova saída</p>
+          </Link>
         </RegisterButton>
       </ButtonGroup>
     </HomeContainer>

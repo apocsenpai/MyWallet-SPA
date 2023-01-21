@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     if (tokenStorage) {
       setToken(JSON.parse(tokenStorage));
     } else {
-      setToken({ token: "" });
+      setToken("");
     }
   }, []);
 

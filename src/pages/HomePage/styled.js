@@ -21,7 +21,7 @@ export const HomeHeader = styled.header`
     font-weight: 700;
     color: ${textColor};
   }
-  & > button{
+  & > button {
     cursor: pointer;
     background-color: transparent;
     border: none;
@@ -54,16 +54,21 @@ export const ButtonGroup = styled.footer`
   gap: 0.8rem;
 `;
 export const RegisterButton = styled(SubmitButton)`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
   padding: 0.5rem;
   width: 100%;
   height: 100%;
-  & > p {
-    width: 50%;
-    text-align: left;
-    font-size: 1rem;
+  & > a {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 100%;
+    color: ${textColor};
+    text-decoration: none;
+    & > p {
+      width: 50%;
+      text-align: left;
+      font-size: 1rem;
+    }
   }
 `;
