@@ -31,7 +31,7 @@ const NewEntryPage = () => {
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
-        }
+        },
       };
       try {
         await axios.post(
@@ -41,6 +41,7 @@ const NewEntryPage = () => {
         );
         navigate("/");
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     },
