@@ -30,7 +30,7 @@ const NewOutflowPage = () => {
     async (e) => {
       e.preventDefault();
       setIsLoading(!isLoading);
-      const url = `${API_URL}/new-outflow`;
+      const url = `${API_URL}/cashflow`;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -42,6 +42,7 @@ const NewOutflowPage = () => {
           {
             ...outflowForm,
             amount: Number(outflowForm.amount.replace(",", ".")).toFixed(2),
+            isEntry: false,
           },
           config
         );

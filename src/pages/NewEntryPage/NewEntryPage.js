@@ -27,7 +27,7 @@ const NewEntryPage = () => {
     async (e) => {
       e.preventDefault();
       setIsLoading(!isLoading);
-      const url = `${API_URL}/new-entry`;
+      const url = `${API_URL}/cashflow`;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -39,6 +39,7 @@ const NewEntryPage = () => {
           {
             ...entryForm,
             amount: Number(entryForm.amount.replace(",", ".")).toFixed(2),
+            isEntry: true,
           },
           config
         );
