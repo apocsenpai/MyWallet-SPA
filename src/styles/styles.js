@@ -23,6 +23,7 @@ export const DataInput = styled.input`
   }
   &::placeholder {
     color: ${placeholderTextColor};
+    opacity: 1;
   }
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {

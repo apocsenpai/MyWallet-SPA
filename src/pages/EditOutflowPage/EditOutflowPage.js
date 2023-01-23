@@ -13,7 +13,7 @@ import { ThreeDots } from "react-loader-spinner";
 import { textColor } from "../../constants/colors/colors";
 import Alert from "../../components/Alert/Alert";
 
-const NewOutflowPage = () => {
+const EditOutflowPage = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -67,7 +67,7 @@ const NewOutflowPage = () => {
   );
   return (
     <RegisterContainer>
-      <p>Nova saída</p>
+      <p>Saída saída</p>
       <DataForm onSubmit={handleCashOutflow}>
         <DataInput
           placeholder="Valor"
@@ -105,4 +105,4 @@ const NewOutflowPage = () => {
     </RegisterContainer>
   );
 };
-export default NewOutflowPage;
+export default EditOutflowPage;

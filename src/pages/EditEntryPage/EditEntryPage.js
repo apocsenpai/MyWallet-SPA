@@ -6,30 +6,50 @@ import {
 } from "../../styles/styles";
 import useAuth from "../../hooks/useAuth";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import API_URL from "../../api/API_URL";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
 import { textColor } from "../../constants/colors/colors";
 import Alert from "../../components/Alert/Alert";
 
-const NewOutflowPage = () => {
+const EditEntryPage = () => {
   const { token } = useAuth();
+  const { registryId } = useParams();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [outflowForm, setOutflowForm] = useState({
+  const [editEntryForm, setEditEntryForm] = useState({
     amount: "",
     description: "",
   });
   useEffect(() => {
-    if (!token) navigate("/");
-  }, [token, navigate]);
-  const handleOutflowForm = useCallback(
+    const fetchData = async () => {
+      if (!token) navigate("/");
+      const url = `${API_URL}/cashflow/${registryId}`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      try {
+        const { data } = await axios.get(url, config);
+        setEditEntryForm(data);
+      } catch (error) {
+        const { message } = error.response.data;
+        setErrorMessage(message);
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 1500);
+      }
+    };
+    fetchData();
+  }, [token, navigate, registryId]);
+  const handleEditEntryForm = useCallback(
     (e) => {
-      setOutflowForm({ ...outflowForm, [e.target.name]: e.target.value });
+      setEditEntryForm({ ...editEntryForm, [e.target.name]: e.target.value });
     },
-    [outflowForm]
+    [editEntryForm]
   );
   const handleCashOutflow = useCallback(
     async (e) => {
@@ -42,12 +62,11 @@ const NewOutflowPage = () => {
         },
       };
       try {
-        await axios.post(
+        await axios.put(
           url,
           {
-            ...outflowForm,
-            amount: Number(outflowForm.amount.replace(",", ".")).toFixed(2),
-            isEntry: false,
+            ...editEntryForm,
+            amount: Number(editEntryForm.amount.replace(",", ".")).toFixed(2),
           },
           config
         );
@@ -63,11 +82,11 @@ const NewOutflowPage = () => {
         }, 1500);
       }
     },
-    [token, outflowForm, isLoading, navigate]
+    [token, editEntryForm, isLoading, navigate]
   );
   return (
     <RegisterContainer>
-      <p>Nova saída</p>
+      <p>Editar saída</p>
       <DataForm onSubmit={handleCashOutflow}>
         <DataInput
           placeholder="Valor"
@@ -76,13 +95,13 @@ const NewOutflowPage = () => {
           step=".01"
           name="amount"
           lang="pt-BR"
-          onChange={handleOutflowForm}
+          onChange={handleEditEntryForm}
           required
         />
         <DataInput
           placeholder="Descrição"
           type={`text`}
-          onChange={handleOutflowForm}
+          onChange={handleEditEntryForm}
           name="description"
           minLength={5}
           maxLength={18}
@@ -105,4 +124,4 @@ const NewOutflowPage = () => {
     </RegisterContainer>
   );
 };
-export default NewOutflowPage;
+export default EditEntryPage;

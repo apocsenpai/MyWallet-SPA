@@ -11,10 +11,12 @@ import API_URL from "../../api/API_URL";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
 import { textColor } from "../../constants/colors/colors";
+import Alert from "../../components/Alert/Alert";
 const NewEntryPage = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [entryForm, setEntryForm] = useState({ amount: "", description: "" });
   useEffect(() => {
     if (!token) navigate("/");
@@ -49,9 +51,12 @@ const NewEntryPage = () => {
           navigate("/");
         }, 1000);
       } catch (error) {
-        setIsLoading(false);
         const { message } = error.response.data;
-        alert(message);
+        setErrorMessage(message);
+        setTimeout(() => {
+          setErrorMessage("");
+          setIsLoading(false);
+        }, 1500);
       }
     },
     [token, entryForm, isLoading, navigate]
@@ -62,11 +67,11 @@ const NewEntryPage = () => {
       <DataForm onSubmit={handleCashEntry}>
         <DataInput
           placeholder="Valor"
-          type={`text`}
-          pattern="[0-9]+([,\.][0-9]+)?"
+          type={`number`}
           min="0"
-          step="any"
+          step=".01"
           name="amount"
+          lang="pt-BR"
           onChange={handleEntryForm}
           required
         />
@@ -75,6 +80,8 @@ const NewEntryPage = () => {
           type={`text`}
           onChange={handleEntryForm}
           name="description"
+          minLength={5}
+          maxLength={18}
           required
         />
         <SubmitButton>
@@ -90,6 +97,7 @@ const NewEntryPage = () => {
           )}
         </SubmitButton>
       </DataForm>
+      {errorMessage && <Alert description={errorMessage} />}
     </RegisterContainer>
   );
 };

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import API_URL from "../../api/API_URL";
+import Alert from "../../components/Alert/Alert";
 import { textColor } from "../../constants/colors/colors";
 import useAuth from "../../hooks/useAuth";
 import {
@@ -17,6 +18,7 @@ const SignInPage = () => {
   const navigate = useNavigate();
   const [loginForm, setLoginForm] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   useEffect(() => {
     if (token) navigate("/home");
   }, [token, navigate]);
@@ -43,8 +45,11 @@ const SignInPage = () => {
         }, 1000);
       } catch (error) {
         const { message } = error.response.data;
-        alert(message);
-        setIsLoading(false);
+        setErrorMessage(message);
+        setTimeout(() => {
+          setErrorMessage("");
+          setIsLoading(false);
+        }, 1500);
       }
     },
     [loginForm, navigate, isLoading, setToken]
@@ -84,6 +89,7 @@ const SignInPage = () => {
       </DataForm>
 
       <Link to="/cadastro">Primeira vez? Cadastre-se!</Link>
+      {errorMessage && <Alert description={errorMessage} />}
     </SignContainer>
   );
 };

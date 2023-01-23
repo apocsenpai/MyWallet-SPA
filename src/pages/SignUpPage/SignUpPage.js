@@ -12,11 +12,13 @@ import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import { ThreeDots } from "react-loader-spinner";
 import { textColor } from "../../constants/colors/colors";
+import Alert from "../../components/Alert/Alert";
 const SignUpPage = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
   const [registrationForm, setRegistrationForm] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   useEffect(() => {
     if (token) navigate("/home");
   }, [token, navigate]);
@@ -41,8 +43,11 @@ const SignUpPage = () => {
         }, 1000);
       } catch (error) {
         const { message } = error.response.data;
-        alert(message);
-        setIsLoading(false);
+        setErrorMessage(message);
+        setTimeout(() => {
+          setErrorMessage("");
+          setIsLoading(false);
+        }, 1500);
       }
     },
     [registrationForm, navigate, isLoading]
@@ -57,6 +62,8 @@ const SignUpPage = () => {
           name="name"
           onChange={handleRegistrationForm}
           disabled={isLoading}
+          minLength={2}
+          maxLength={20}
           required
         />
         <DataInput
@@ -65,6 +72,8 @@ const SignUpPage = () => {
           name="email"
           onChange={handleRegistrationForm}
           disabled={isLoading}
+          minLength={8}
+          maxLength={40}
           required
         />
         <DataInput
@@ -73,6 +82,8 @@ const SignUpPage = () => {
           name="password"
           onChange={handleRegistrationForm}
           disabled={isLoading}
+          minLength={8}
+          maxLength={20}
           required
         />
         <DataInput
@@ -81,6 +92,8 @@ const SignUpPage = () => {
           name="confirmedPassword"
           onChange={handleRegistrationForm}
           disabled={isLoading}
+          minLength={8}
+          maxLength={20}
           required
         />
         <SubmitButton disabled={isLoading}>
@@ -98,6 +111,7 @@ const SignUpPage = () => {
       </DataForm>
 
       <Link to="/">Já tem uma conta? Entre agora!</Link>
+      {errorMessage && <Alert description={errorMessage} />}
     </SignContainer>
   );
 };

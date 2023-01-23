@@ -40,7 +40,7 @@ export const LogContainer = styled.main`
   justify-content: ${({ isExistCashFlow }) =>
     isExistCashFlow ? "space-between" : "center"};
   align-items: center;
-  padding: 1.25rem 0.8rem;
+  padding: 1.25rem .2rem 1.25rem .8rem;
   background-color: ${textColor};
   border: 0.16rem solid transparent;
   border-radius: 0.4rem;

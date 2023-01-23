@@ -16,6 +16,8 @@ import { Link, useNavigate } from "react-router-dom";
 import CashFlowCard from "./CashFlowCard/CashFlowCard";
 import API_URL from "../../api/API_URL";
 import axios from "axios";
+import ConfirmAlert from "../../components/ConfirmAlert/ConfirmAlert";
+import Alert from "../../components/Alert/Alert";
 
 const HomePage = () => {
   const { setToken, token } = useAuth();
@@ -24,6 +26,9 @@ const HomePage = () => {
   const [userName, setUserName] = useState("");
   const [isNegative, setIsNegative] = useState(false);
   const [balance, setBalance] = useState(0);
+  const [isLogout, setIsLogout] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [deleteFlag, setDeleteFlag] = useState(false);
   useEffect(() => {
     if (!token) navigate("/");
     const fetchData = async () => {
@@ -43,7 +48,7 @@ const HomePage = () => {
       }
     };
     fetchData();
-  }, [token, navigate]);
+  }, [token, navigate, deleteFlag]);
   useEffect(() => {
     let total = 0;
     if (cashFlow) {
@@ -58,7 +63,6 @@ const HomePage = () => {
       setBalance(Math.abs(total).toFixed(2).replace(".", ","));
     }
   }, [cashFlow]);
-
   const handleLogout = useCallback(async () => {
     const url = `${API_URL}/logout`;
     const config = {
@@ -72,14 +76,19 @@ const HomePage = () => {
       setToken("");
       navigate("/");
     } catch (error) {
-      alert(error.response.mensage);
+      const { message } = error.response.data;
+      setErrorMessage(message);
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 1000);
+      alert();
     }
   }, [token, setToken, navigate]);
   return (
     <HomeContainer>
       <HomeHeader>
         <p>Olá, {userName}</p>
-        <button onClick={handleLogout}>
+        <button onClick={() => setIsLogout(true)}>
           <IoExitOutline />
         </button>
       </HomeHeader>
@@ -95,6 +104,8 @@ const HomePage = () => {
                   isEntry={isEntry}
                   amount={amount}
                   description={description}
+                  setDeleteFlag = {setDeleteFlag}
+                  deleteFlag = {deleteFlag}
                 />
               ))}
             </CashFlowContainer>
@@ -121,6 +132,14 @@ const HomePage = () => {
           </Link>
         </RegisterButton>
       </ButtonGroup>
+      {isLogout && (
+        <ConfirmAlert
+          setShowWindow={setIsLogout}
+          title={"Deseja mesmo sair?"}
+          callback={handleLogout}
+        />
+      )}
+      {errorMessage && <Alert description={errorMessage} />}
     </HomeContainer>
   );
 };
