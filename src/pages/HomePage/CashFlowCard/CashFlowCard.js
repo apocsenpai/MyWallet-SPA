@@ -44,7 +44,7 @@ const CashFlowCard = ({
     <Card>
       <div>
         <Date>{date}</Date>
-        <Link to={isEntry ? `/editar-entrada/${id}`:`/editar-saida/${id}`}>{description}</Link>
+        <Link to={`/editar-registro/${id}`}>{description}</Link>
       </div>
       <div>
         <Amount isEntry={isEntry}>{amount.replace(".", ",")}</Amount>

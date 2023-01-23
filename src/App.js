@@ -4,8 +4,7 @@ import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import HomePage from "./pages/HomePage/HomePage";
 import NewEntryPage from "./pages/NewEntryPage/NewEntryPage";
 import NewOutflowPage from "./pages/NewOutflowPage/NewOutflowPage";
-import EditEntryPage from "./pages/EditEntryPage/EditEntryPage";
-import EditOutflowPage from "./pages/EditOutflowPage/EditOutflowPage";
+import EditRegistry from "./pages/EditRegistry/EditRegistry";
 const App = () => {
   return (
     <>
@@ -16,8 +15,7 @@ const App = () => {
         <Route path="/home" element={<HomePage />} />
         <Route path="/nova-entrada" element={<NewEntryPage />} />
         <Route path="/nova-saida" element={<NewOutflowPage />} />
-        <Route path="/editar-entrada/:registryId" element={<EditEntryPage/>}/>
-        <Route path="/editar-saida/:registryId" element={<EditOutflowPage/>}/>
+        <Route path="/editar-registro/:registryId" element={<EditRegistry/>}/>
       </Routes>
     </Router>
     </>

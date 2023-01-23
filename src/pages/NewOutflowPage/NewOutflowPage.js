@@ -77,6 +77,7 @@ const NewOutflowPage = () => {
           name="amount"
           lang="pt-BR"
           onChange={handleOutflowForm}
+          disabled={isLoading}
           required
         />
         <DataInput
@@ -86,6 +87,7 @@ const NewOutflowPage = () => {
           name="description"
           minLength={5}
           maxLength={18}
+          disabled={isLoading}
           required
         />
         <SubmitButton disabled={isLoading}>

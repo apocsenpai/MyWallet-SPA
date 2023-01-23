@@ -13,16 +13,17 @@ import { ThreeDots } from "react-loader-spinner";
 import { textColor } from "../../constants/colors/colors";
 import Alert from "../../components/Alert/Alert";
 
-const EditEntryPage = () => {
+const EditRegistry = () => {
   const { token } = useAuth();
   const { registryId } = useParams();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [editEntryForm, setEditEntryForm] = useState({
+  const [editRegistryForm, setEditRegistryForm] = useState({
     amount: "",
     description: "",
   });
+  const [entryOrOutflow, setEntryOrOutflow] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       if (!token) navigate("/");
@@ -34,7 +35,9 @@ const EditEntryPage = () => {
       };
       try {
         const { data } = await axios.get(url, config);
-        setEditEntryForm(data);
+        const { amount, description, isEntry } = data;
+        setEditRegistryForm({ amount, description, isEntry });
+        setEntryOrOutflow(isEntry ? "entrada" : "saída");
       } catch (error) {
         const { message } = error.response.data;
         setErrorMessage(message);
@@ -45,17 +48,20 @@ const EditEntryPage = () => {
     };
     fetchData();
   }, [token, navigate, registryId]);
-  const handleEditEntryForm = useCallback(
+  const handleEditRegistryForm = useCallback(
     (e) => {
-      setEditEntryForm({ ...editEntryForm, [e.target.name]: e.target.value });
+      setEditRegistryForm({
+        ...editRegistryForm,
+        [e.target.name]: e.target.value,
+      });
     },
-    [editEntryForm]
+    [editRegistryForm]
   );
   const handleCashOutflow = useCallback(
     async (e) => {
       e.preventDefault();
       setIsLoading(!isLoading);
-      const url = `${API_URL}/cashflow`;
+      const url = `${API_URL}/cashflow/${registryId}`;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -65,8 +71,10 @@ const EditEntryPage = () => {
         await axios.put(
           url,
           {
-            ...editEntryForm,
-            amount: Number(editEntryForm.amount.replace(",", ".")).toFixed(2),
+            ...editRegistryForm,
+            amount: Number(editRegistryForm.amount.replace(",", ".")).toFixed(
+              2
+            ),
           },
           config
         );
@@ -82,11 +90,11 @@ const EditEntryPage = () => {
         }, 1500);
       }
     },
-    [token, editEntryForm, isLoading, navigate]
+    [token, editRegistryForm, isLoading, registryId, navigate]
   );
   return (
     <RegisterContainer>
-      <p>Editar saída</p>
+      <p>Editar {entryOrOutflow}</p>
       <DataForm onSubmit={handleCashOutflow}>
         <DataInput
           placeholder="Valor"
@@ -95,16 +103,20 @@ const EditEntryPage = () => {
           step=".01"
           name="amount"
           lang="pt-BR"
-          onChange={handleEditEntryForm}
+          onChange={handleEditRegistryForm}
+          value={editRegistryForm.amount}
+          disabled={isLoading}
           required
         />
         <DataInput
           placeholder="Descrição"
           type={`text`}
-          onChange={handleEditEntryForm}
+          onChange={handleEditRegistryForm}
           name="description"
           minLength={5}
           maxLength={18}
+          value={editRegistryForm.description}
+          disabled={isLoading}
           required
         />
         <SubmitButton disabled={isLoading}>
@@ -116,7 +128,7 @@ const EditEntryPage = () => {
               ariaLabel="three-dots-loading"
             />
           ) : (
-            "Salvar saída"
+            `Atualizar ${entryOrOutflow}`
           )}
         </SubmitButton>
       </DataForm>
@@ -124,4 +136,4 @@ const EditEntryPage = () => {
     </RegisterContainer>
   );
 };
-export default EditEntryPage;
+export default EditRegistry;

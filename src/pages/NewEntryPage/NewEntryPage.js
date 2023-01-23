@@ -73,6 +73,7 @@ const NewEntryPage = () => {
           name="amount"
           lang="pt-BR"
           onChange={handleEntryForm}
+          disabled={isLoading}
           required
         />
         <DataInput
@@ -82,6 +83,7 @@ const NewEntryPage = () => {
           name="description"
           minLength={5}
           maxLength={18}
+          disabled={isLoading}
           required
         />
         <SubmitButton>
