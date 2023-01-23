@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
+import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import API_URL from "../../api/API_URL";
+import { textColor } from "../../constants/colors/colors";
 import useAuth from "../../hooks/useAuth";
 import {
   DataForm,
@@ -36,7 +38,9 @@ const SignInPage = () => {
 
         setToken(token);
         localStorage.setItem("token", JSON.stringify(token));
-        navigate("/home");
+        setTimeout(() => {
+          navigate("/home");
+        }, 1000);
       } catch (error) {
         const { message } = error.response.data;
         alert(message);
@@ -65,7 +69,18 @@ const SignInPage = () => {
           disabled={isLoading}
           required
         />
-        <SubmitButton disabled={isLoading}>Entrar</SubmitButton>
+        <SubmitButton disabled={isLoading}>
+          {isLoading ? (
+            <ThreeDots
+              height="30"
+              width="50"
+              color={textColor}
+              ariaLabel="three-dots-loading"
+            />
+          ) : (
+            "Entrar"
+          )}
+        </SubmitButton>
       </DataForm>
 
       <Link to="/cadastro">Primeira vez? Cadastre-se!</Link>

@@ -61,6 +61,7 @@ export const RegisterButton = styled(SubmitButton)`
   padding: 0.5rem;
   width: 100%;
   height: 100%;
+  display: block;
   & > a {
     display: flex;
     flex-direction: column;
@@ -70,7 +71,7 @@ export const RegisterButton = styled(SubmitButton)`
     color: ${textColor};
     text-decoration: none;
     & > p {
-      width: 50%;
+      width: 2rem;
       text-align: left;
       font-size: 1rem;
     }

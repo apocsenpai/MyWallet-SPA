@@ -46,7 +46,7 @@ const HomePage = () => {
   }, [token, navigate]);
   useEffect(() => {
     let total = 0;
-    if(cashFlow){
+    if (cashFlow) {
       cashFlow.forEach((c) => {
         if (c.isEntry === true) {
           total += Number(c.amount);
@@ -59,11 +59,22 @@ const HomePage = () => {
     }
   }, [cashFlow]);
 
-  const handleLogout = useCallback(() => {
-    localStorage.removeItem("token");
-    setToken("");
-    navigate("/");
-  }, [setToken, navigate]);
+  const handleLogout = useCallback(async () => {
+    const url = `${API_URL}/logout`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      await axios.delete(url, config);
+      localStorage.removeItem("token");
+      setToken("");
+      navigate("/");
+    } catch (error) {
+      alert(error.response.mensage);
+    }
+  }, [token, setToken, navigate]);
   return (
     <HomeContainer>
       <HomeHeader>

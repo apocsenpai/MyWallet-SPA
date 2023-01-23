@@ -10,6 +10,8 @@ import {
 import API_URL from "../../api/API_URL";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
+import { ThreeDots } from "react-loader-spinner";
+import { textColor } from "../../constants/colors/colors";
 const SignUpPage = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
@@ -34,7 +36,9 @@ const SignUpPage = () => {
       const url = `${API_URL}/sign-up`;
       try {
         await axios.post(url, registrationForm);
-        navigate("/");
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
       } catch (error) {
         const { message } = error.response.data;
         alert(message);
@@ -79,7 +83,18 @@ const SignUpPage = () => {
           disabled={isLoading}
           required
         />
-        <SubmitButton disabled={isLoading}>Cadastrar</SubmitButton>
+        <SubmitButton disabled={isLoading}>
+          {isLoading ? (
+            <ThreeDots
+              height="30"
+              width="50"
+              color={textColor}
+              ariaLabel="three-dots-loading"
+            />
+          ) : (
+            "Cadastrar"
+          )}
+        </SubmitButton>
       </DataForm>
 
       <Link to="/">Já tem uma conta? Entre agora!</Link>

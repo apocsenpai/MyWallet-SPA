@@ -75,6 +75,7 @@ export const SignContainer = styled.div`
 `;
 export const SubmitButton = styled.button`
   height: 2.875rem;
+  width: 100%;
   background-color: ${submitButtonColor};
   color: ${textColor};
   border: 0.16rem solid transparent;
@@ -84,7 +85,14 @@ export const SubmitButton = styled.button`
   font-size: 1.25rem;
   cursor: pointer;
   transition: 100ms linear;
-  &:hover{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
     opacity: 0.8;
+  }
+  &:disabled{
+    opacity: 0.8;
+    cursor: default;
   }
 `;

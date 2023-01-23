@@ -9,6 +9,9 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API_URL from "../../api/API_URL";
 import axios from "axios";
+import { ThreeDots } from "react-loader-spinner";
+import { textColor } from "../../constants/colors/colors";
+
 const NewOutflowPage = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
@@ -46,7 +49,9 @@ const NewOutflowPage = () => {
           },
           config
         );
-        navigate("/");
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
       } catch (error) {
         setIsLoading(false);
         const { message } = error.response.data;
@@ -76,7 +81,18 @@ const NewOutflowPage = () => {
           name="description"
           required
         />
-        <SubmitButton>Salvar saída</SubmitButton>
+        <SubmitButton disabled={isLoading}>
+          {isLoading ? (
+            <ThreeDots
+              height="30"
+              width="50"
+              color={textColor}
+              ariaLabel="three-dots-loading"
+            />
+          ) : (
+            "Salvar saída"
+          )}
+        </SubmitButton>
       </DataForm>
     </RegisterContainer>
   );
