@@ -36,13 +36,17 @@ const NewEntryPage = () => {
       try {
         await axios.post(
           url,
-          { ...entryForm, amount: entryForm.amount.replace(",", ".") },
+          {
+            ...entryForm,
+            amount: Number(entryForm.amount.replace(",", ".")).toFixed(2),
+          },
           config
         );
         navigate("/");
       } catch (error) {
         setIsLoading(false);
-        console.log(error);
+        const { message } = error.response.data;
+        alert(message);
       }
     },
     [token, entryForm, isLoading, navigate]

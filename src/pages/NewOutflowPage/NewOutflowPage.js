@@ -13,7 +13,10 @@ const NewOutflowPage = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [outflowForm, setOutflowForm] = useState({ amount: "", description: "" });
+  const [outflowForm, setOutflowForm] = useState({
+    amount: "",
+    description: "",
+  });
   useEffect(() => {
     if (!token) navigate("/");
   }, [token, navigate]);
@@ -36,13 +39,17 @@ const NewOutflowPage = () => {
       try {
         await axios.post(
           url,
-          { ...outflowForm, amount: outflowForm.amount.replace(",", ".") },
+          {
+            ...outflowForm,
+            amount: Number(outflowForm.amount.replace(",", ".")).toFixed(2),
+          },
           config
         );
         navigate("/");
       } catch (error) {
         setIsLoading(false);
-        console.log(error);
+        const { message } = error.response.data;
+        alert(message);
       }
     },
     [token, outflowForm, isLoading, navigate]

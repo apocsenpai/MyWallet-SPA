@@ -1,18 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 export const AuthContext = React.createContext({});
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
   const tokenValue = useMemo(() => ({ token, setToken }), [token]);
-  useEffect(() => {
-    const tokenStorage = localStorage.getItem("token");
-    if (tokenStorage) {
-      setToken(JSON.parse(tokenStorage));
-    } else {
-      setToken("");
-    }
-  }, []);
 
   return (
     <AuthContext.Provider value={tokenValue}>{children}</AuthContext.Provider>
